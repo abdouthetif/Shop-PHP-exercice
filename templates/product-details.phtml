@@ -1,55 +1,13 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <!-- Required meta tags -->
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-        <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-
-        <!-- CSS -->
-        <link rel="stylesheet" href="css/styles.css">
-        
-        <title>Hello, world!</title>
-    </head>
-    <body>
-        <header>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">Navbar</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Link</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-
-        <main class="bg-light">
-            <div class="container py-1">
-                <div class="d-flex py-5">
-                    <aside class="mr-3">
-                        <img src="images/<?=$productDetails['picture'];?>" alt="" class="w-30rem">
-                    </aside>
-                    <section class="">
-                        <h1><?=$productDetails['name'];?></h1>
-                        <p><?=$productDetails['description'];?></p>
-                    </section>
-                </div>
-            </div>
-        </main>
-
-        <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-    </body>
-</html>
+<!-- Product Image -->
+<aside class="col mr-3">
+    <img src="images/<?=$productDetails['picture'];?>" alt="" class="w-30rem">
+</aside>
+<!-- Product Details -->
+<section class="col text-center align-self-center">
+    <h1><?=$productDetails['name'];?></h1>
+    <span class="badge badge-secondary mb-2"><?= $productDetails['label'];?></span>
+    <span class="badge badge-secondary mb-2"><?= $productDetails['price'];?> €</span>
+    <span class="badge badge-secondary mb-2">Stock : <?= $productDetails['stock'];?></span>
+    <span class="badge badge-secondary mb-2">Created by : <?= $productDetails['shop_name'];?></span>
+    <p><?=nl2br($productDetails['description']);?></p>
+</section>

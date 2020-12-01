@@ -1,3 +1,12 @@
+body {
+    padding-top: 2em;
+}
+
+main {
+    padding-top: 4em;
+}
+
+/* Product Details Image Width */
 .w-30rem {
     width: 30rem;
 }
