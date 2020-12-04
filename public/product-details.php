@@ -4,19 +4,45 @@
 require '../src/functions.php';
 
 // Si problème avec l'id du produit -> message d'erreur + exit;
-if (!isset($_GET['prudctId'])) {
+if (!isset($_GET['productId'])) {
     echo 'Error : no valid product id';
     exit;
 }
 
 // $productId = (int) $_GET['id'];
-$product = intval($_GET['prudctId']);
+$productId = intval($_GET['productId']);
 
 // Récupération des détails d'un produit
-$productDetails = getProduct($product);
+$productDetails = getProductById($productId);
 
-/* Inclusion du fichier de template */
+// Récupération de tous les commentaires
+$comments = getAllComments($productId);
+
+/* GET PICTURE FOR AJAX
+$picture_1 = $productDetails['picture_1'];
+$picture_2 = $productDetails['picture_2'];
+$picture_3 = $productDetails['picture_3'];
+$picture_4 = $productDetails['picture_4'];
+
+$productPictures = [];
+$productPictures = [
+    'status' => 'success',
+    'pictures' => [
+        1,
+        2,
+        3,
+        4
+    ]
+];
+echo json_encode($productPictures);
+*/
+
+// Inclusion du fichier de template et ses variables
 $pageTitle = $productDetails['name'];
-$template = 'product-details';
 $template_bg = 'bg-light';
-include '../templates/base.phtml';
+render('product-details', [
+    'productDetails' => $productDetails,
+    'comments' => $comments,
+    'pageTitle' => $pageTitle, 
+    'template_bg' => $template_bg
+]);

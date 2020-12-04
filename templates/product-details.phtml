@@ -1,13 +1,104 @@
 <!-- Product Image -->
-<aside class="col mr-3">
-    <img src="images/<?=$productDetails['picture'];?>" alt="" class="w-30rem">
+<aside class="col masthead text-center">
+    <img src="images/<?=$productDetails['picture_1'];?>" alt="<?=$productDetails['name'];?>" class="w-30rem">
 </aside>
+
 <!-- Product Details -->
 <section class="col text-center align-self-center">
     <h1><?=$productDetails['name'];?></h1>
-    <span class="badge badge-secondary mb-2"><?= $productDetails['label'];?></span>
-    <span class="badge badge-secondary mb-2"><?= $productDetails['price'];?> €</span>
-    <span class="badge badge-secondary mb-2">Stock : <?= $productDetails['stock'];?></span>
-    <span class="badge badge-secondary mb-2">Created by : <?= $productDetails['shop_name'];?></span>
+    <div class="mt-2 mb-4">
+        <span class="badge badge-secondary mb-2"><?=$productDetails['label'];?></span>
+        <span class="badge badge-secondary mb-2"><?=$productDetails['price'];?> €</span>
+        <span class="badge badge-secondary mb-2">Stock : <?=$productDetails['stock'];?></span>
+        <span class="badge badge-secondary mb-2">Created by : <?=$productDetails['shop_name'];?></span>
+    </div>
     <p><?=nl2br($productDetails['description']);?></p>
 </section>
+
+<!-- Comments Section -->
+<section class="w-100">
+    <hr>
+    <h3 class="text-center mb-3">Commentaires</h3>
+    <?php if(empty($comments)): ?>
+        <p class="text-center">Pas d'avis pour le moment ! </p>
+    <?php else: ?>
+        <?php foreach($comments as $comment): ?>
+
+            <!-- Bootstrap Cards -->
+            <div class="card mt-4 border-dark">
+                <div class="card-header">
+                    <h5><?=$comment['title'];?></h5>
+                    <div class="d-inline">
+                        <?php for($i=1; $i<=$comment['rating']; $i++): ?>
+                            <svg class="yellow" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                            </svg>
+                            <?php $ratingIndex = $i;?>
+                        <?php endfor;?>
+                        <?php for($i=$ratingIndex; $i<5; $i++): ?>
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                            </svg>
+                        <?php endfor;?>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p class="card-text"><?=$comment['content'];?></p>
+                </div>
+                <div class="card-footer">
+                    <span>Posté le <?=format_date($comment['createdAt']);?></span>
+                    <span>Par </span>
+                </div>
+            </div>
+        <?php endforeach;?>
+    <?php endif;?>
+</section>
+
+<!-- Formulaire de commentaire -->
+<?php if (isAuthenticated()): ?>
+    <div class="col-12 mt-5">
+        <hr>
+        <form action="add_comment.php" class="text-center" method="POST">
+            <input type="hidden" name="productId" value="<?=$productDetails['productId'];?>">
+            <fieldset>
+                <legend class="h3">Donnez votre avis !</legend>
+                <div class="d-flex justify-content-between mt-3">
+                    <div>
+                        <label for="title" class="mx-4">Choisissez un titre :</label>
+                        <input type="text" name="title" id="title">
+                    </div>
+
+                    <!-- Rating Star -->
+                    <div>
+                        <input type="hidden" name="starRate" value="1" id="starRate">
+                        <span>Notez le produit : </span>
+                        <div class="d-inline mx-4 starRating">
+                            <svg data-rating="1" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                            </svg>
+                            <svg data-rating="2" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                            </svg>
+                            <svg data-rating="3" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                            </svg>
+                            <svg data-rating="4" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                            </svg>
+                            <svg data-rating="5" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.283.95l-3.523 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label for="comment" class="h5 my-3">Ecrivez votre commentaire :</label>
+                    <textarea name="comment" id="comment" class="d-block w-100" cols="30" rows="10"></textarea>
+                </div>
+            </fieldset>
+            <input type="submit" class="btn btn-dark mt-3" value="Publier le commentaire">
+        </form>
+    </div>
+<?php else: ?>
+    <p><a href="login.php">Connectez-vous</a> pour donner votre avis !</p>
+<?php endif; ?>  

@@ -1,19 +1,18 @@
-
 <!-- Bootstrap Cards -->
 <?php foreach($products as $product): ?>
     <div class="col-6 mb-5">
         <div class="card bg-light border-secondary mb-3">
-            <a href="product-details.php?prudctId=<?= $product['id'];?>">
+            <a href="product-details.php?productId=<?= $product['id'];?>">
                 <img src="images/<?= $product['picture'];?>" class="card-img-top" alt="<?= $product['name'];?>">
             </a>
             <div class="card-body">
                 <h5 class="card-title font-weight-bold">
-                    <a href="product-details.php?prudctId=<?= $product['id'];?>" class="text-body">
+                    <a href="product-details.php?productId=<?= $product['id'];?>" class="text-body">
                         <?= $product['name'];?>
                     </a>
                 </h5>
-                <p class="card-text h5">Créateur : <?= $product['shop_name'];?></p>
-                <p class="card-text h5">Prix : <?= $product['price'];?> €</p>
+                <p class="card-text h5">Créateur : <?=$product['shop_name'];?></p>
+                <p class="card-text h5">Prix : <?=format_price($product['price']);?></p>
                 <span class="badge badge-secondary mb-2"><?= $product['label'];?></span>
                 <a href="#" class="btn btn-primary d-block">Ajouter au panier</a>
             </div>

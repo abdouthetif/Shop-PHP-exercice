@@ -3,10 +3,19 @@ body {
 }
 
 main {
-    padding-top: 4em;
+    padding: 4em 0;
 }
 
 /* Product Details Image Width */
 .w-30rem {
     width: 30rem;
+}
+
+/* Star Rating Color */
+.yellow {
+    color: orange;
+}
+
+.justify-content-evenly {
+    justify-content: space-evenly;
 }

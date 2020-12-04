@@ -3,11 +3,14 @@
 // Inclusion des dépendances
 require '../src/functions.php';
 
-// Récupération de tous les produits
-$products = getProducts();
+// Récupère tous les produits
+$products = getAllProducts();
 
-/* Inclusion du fichier de template */
+// Inclusion du fichier de template et ses variables
 $pageTitle = 'Welcome to my shop!';
-$template = 'index';
 $template_bg = 'bg-dark';
-include '../templates/base.phtml';
+render('index', [
+    'products' => $products,
+    'pageTitle' => $pageTitle, 
+    'template_bg' => $template_bg
+]);
