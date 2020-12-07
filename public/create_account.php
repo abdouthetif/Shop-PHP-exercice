@@ -20,12 +20,12 @@ if(!empty($_POST)) {
     
     // Validation du formulaire
     $errors = validateUserForm($firstname, $lastname, $email, $password, $passwordConfirm);
-    dump($errors);
+    
     // Si il n'y a pas d'erreur on ajoute l'email
     if (empty($errors)) {
 
         // Ajout de l'email dans le fichier csv
-        addUser($firstname, $lastname, $email, $password);
+        addUser($firstname, $lastname, $email, $password, ROLE_USER);
 
         addFlashMessage("Votre compte a bien été créé !");
 
@@ -38,11 +38,9 @@ if(!empty($_POST)) {
 }
 
 // Inclusion du fichier de template et ses variables
-$pageTitle = 'Créez un compte ou connectez vous';
-$template_bg = 'bg-light';
 render('create_account', [
-    'pageTitle' => $pageTitle, 
-    'template_bg' => $template_bg,
+    'pageTitle' => 'Créez un compte ou connectez vous', 
+    'template_bg' => 'bg-light',
     'errors' => $errors,
     'firstname' => $firstname,
     'lastname' => $lastname,

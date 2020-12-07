@@ -70,7 +70,8 @@ function getAllProducts()
             JOIN categories
             ON products.category_id = categories.id
             JOIN creators
-            ON products.creator_id = creators.id';
+            ON products.creator_id = creators.id
+            ORDER BY products.id';
 
     return selectAll($sql);
 }
@@ -84,6 +85,8 @@ function getProductById(int $id)
                    products.description,  
                    products.price, 
                    products.stock, 
+                   products.category_id,
+                   products.creator_id,
                    pictures.picture_1,
                    pictures.picture_2,
                    pictures.picture_3,
@@ -114,6 +117,26 @@ function getAllComments(int $id)
     return selectAll($sql, [$id]);
 }
 
+function getAllCategories()
+{
+    // Requête de sélection SQL
+    $sql = 'SELECT id, label
+            FROM categories
+            ORDER BY label';
+    
+    return selectAll($sql);
+}
+
+function getAllCreators()
+{
+    // Requête de sélection SQL
+    $sql = 'SELECT id, shop_name
+            FROM creators
+            ORDER BY shop_name';
+    
+    return selectAll($sql);
+}
+
 /* Ajoute le commentaire et ses détails dans la BDD */
 function addComment(string $comment, string $title, int $productId, int $rating) {
 
@@ -126,19 +149,51 @@ function addComment(string $comment, string $title, int $productId, int $rating)
 }
 
 /* Ajoute un utilisateur à la BDD */
-function addUser(string $firstname, string $lastname, string $email, string $password)
+function addUser(string $firstname, string $lastname, string $email, string $password, string $role)
 {
     // Requête SQL
-    $sql = 'INSERT INTO users (firstname, lastname, email, password, createdAt)
-            VALUES (?, ?, ?, ?, NOW())';
+    $sql = 'INSERT INTO users (firstname, lastname, email, password, createdAt, role)
+            VALUES (?, ?, ?, ?, NOW(), ?)';
+
+    // Hashage du mot de passe 
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             
-    prepareAndExecuteQuery($sql, [$firstname, $lastname, $email, $password]);
+    prepareAndExecuteQuery($sql, [$firstname, $lastname, $email, $hashedPassword, $role]);
+}
+
+function insertProduct(string $name, string  $description, float $price, int $stock, int $categoryId, int $creatorId, string $picture)
+{
+    $sql = 'INSERT INTO products (name, description, price, stock, category_id, creator_id)
+            VALUES (?, ?, ?, ?, ?, ?);
+            INSERT INTO pictures (product_id, picture_1)
+            VALUES (LAST_INSERT_ID(), ?)';
+
+    prepareAndExecuteQuery($sql, [$name, $description, $price, $stock, $categoryId, $creatorId, $picture]);
+}
+
+function updateProduct(int $productId, string $name, string  $description, float $price, int $stock, int $categoryId, int $creatorId, string $picture)
+{
+    $sql = 'UPDATE products
+            INNER JOIN pictures
+            ON products.id = pictures.product_id
+            SET name = ?, description = ?, price = ?, stock = ?, category_id = ?, creator_id = ?, pictures.picture_1 = ?
+            WHERE products.id = ?';
+
+    prepareAndExecuteQuery($sql, [$name, $description, $price, $stock, $categoryId, $creatorId, $picture, $productId]);
+}
+
+function removeProduct(int $productId)
+{
+    $sql = 'DELETE FROM products
+            WHERE id = ?';
+
+    prepareAndExecuteQuery($sql, [$productId]);
 }
 
 /* Sélectionne un utilisateur à partir de son email */
 function getUserByEmail(string $email) 
 {
-    $sql = 'SELECT id, firstname, lastname, email, password 
+    $sql = 'SELECT id, firstname, lastname, email, password, role 
             FROM users
             WHERE email = ?';
 
@@ -147,21 +202,21 @@ function getUserByEmail(string $email)
 
 function validateFirstname(string $firstname) 
 {
-    $errors = [];
+    $errors = "";
 
     // Vérifie si le champ est vide
     if (!isset($firstname) || empty($firstname)) {
-        $errors[] = 'Le champ "Prénom" est obligatoire';
+        $errors = 'Le champ "Prénom" est obligatoire';
     }
 
     // Vérifie si le firstname est trop court
     else if (iconv_strlen($firstname) < 5) {
-        $errors[] = 'Le champ "Prénom" est trop court';
+        $errors = 'Le champ "Prénom" est trop court';
     }
 
     // Vérifie si le firstname est trop long
     else if (iconv_strlen($firstname) > 15) {
-        $errors[] = 'Le champ "Prénom" est trop long';
+        $errors = 'Le champ "Prénom" est trop long';
     }
 
     return $errors;
@@ -169,21 +224,21 @@ function validateFirstname(string $firstname)
 
 function validateLastname(string $lastname) 
 {
-    $errors = [];
-
+    $errors = "";
+    
     // Vérifie si le champ est vide
     if (!isset($lastname) || empty($lastname)) {
-        $errors[] = 'Le champ "Nom" est obligatoire';
+        $errors = 'Le champ "Nom" est obligatoire';
     }
 
     // Vérifie si le firstname est trop court
     else if (iconv_strlen($lastname) < 5) {
-        $errors[] = 'Le champ "Nom" est trop court';
+        $errors = 'Le champ "Nom" est trop court';
     }
 
     // Vérifie si le firstname est trop long
     else if (iconv_strlen($lastname) > 15) {
-        $errors[] = 'Le champ "Nom" est trop long';
+        $errors = 'Le champ "Nom" est trop long';
     }
 
     return $errors;
@@ -191,21 +246,21 @@ function validateLastname(string $lastname)
 
 function validateEmail(string $email) 
 {
-    $errors = [];
-
+    $errors = "";
+    
     // Vérifie si le champ est vide
     if (!isset($email) || empty($email)) {
-        $errors[] = 'Le champ "Email" est obligatoire';
+        $errors = 'Le champ "Email" est obligatoire';
     }
 
     // Vérifie le format de l'email
     else if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Ce n'est pas une adresse email valide.";
+        $errors = "Ce n'est pas une adresse email valide.";
     }
 
     // Vérifie l'existance de l'email dans la BD
     else if (getUserByEmail($email)) {
-        $errors[] = "Cette adresse email existe déjà.";
+        $errors = "Cette adresse email existe déjà.";
     }
 
     return $errors;
@@ -213,8 +268,8 @@ function validateEmail(string $email)
 
 function validatePassword(string $password, string $passwordConfirm) 
 {
-    $errors = [];
-
+    $errors = '';
+    
     // Vérifie la fiabilité du mot de passe
     $uppercase = preg_match('@[A-Z]@', $password);
     $lowercase = preg_match('@[a-z]@', $password);
@@ -223,42 +278,42 @@ function validatePassword(string $password, string $passwordConfirm)
 
     // Vérifie si le champ password est vide
     if (!isset($password) || empty($password)) {
-        $errors[] = 'Le champ "Mot de passe" est obligatoire';
+        $errors = 'Le champ "Mot de passe" est obligatoire';
     }
 
     // Vérifie si le mot de passe a 1 majuscule
     else if(!$uppercase) {
-        $errors[] = 'Le mot de passe doit comporter une lettre majuscule ou plus';
+        $errors = 'Le mot de passe doit comporter une lettre majuscule ou plus';
     }
 
     // Vérifie si le mot de passe a 1 minuscule
     else if (!$lowercase) {
-        $errors[] = 'Le mot de passe doit comporter une lettre minuscule ou plus';
+        $errors = 'Le mot de passe doit comporter une lettre minuscule ou plus';
     }
 
     // Vérifie si le mot de passe a 1 chiffre
     else if (!$number) {
-        $errors[] = 'Le mot de passe doit comporter un chiffre ou plus';
+        $errors = 'Le mot de passe doit comporter un chiffre ou plus';
     }
 
     // Vérifie si le mot de passe a 1 caractère spécial
     else if (!$specialChars) {
-        $errors[] = 'Le mot de passe doit comporter un caractère spécial ou plus';
+        $errors = 'Le mot de passe doit comporter un caractère spécial ou plus';
     }
 
     // Vérifie si le mot de passe est supérieur à 8 caractères
     else if (mb_strlen($password) < 8) {
-        $errors[] = 'Le mot de passe doit comporter 8 caractère ou plus';
+        $errors = 'Le mot de passe doit comporter 8 caractère ou plus';
     }
 
     // Vérifie si le champ passwordConfirm est vide
     else if (!isset($passwordConfirm) || empty($passwordConfirm)) {
-        $errors[] = 'Le champ "Confirmation du mot de passe" est obligatoire';
+        $errors = 'Le champ "Confirmation du mot de passe" est obligatoire';
     }
 
     // Vérifie si le mot de passe est identique à la confirmation
     else if ($password != $passwordConfirm) {
-        $errors[] = 'La confirmation du mot de passe ne correspond pas au mot de passe';
+        $errors = 'La confirmation du mot de passe ne correspond pas au mot de passe';
     }
 
     return $errors;
@@ -269,12 +324,22 @@ function validateUserForm(string $firstname, string $lastname, string $email, st
     $errors = [];
     
     // Stock les messages d'erreurs dans un tableau
-    $errors = [
-        validateFirstname($firstname),
-        validateLastname($lastname),
-        validateEmail($email),
-        validatePassword($password, $passwordConfirm)
-    ]; 
+    if (!empty(validateFirstname($firstname))) {
+
+        $errors[] = validateFirstname($firstname);
+    }
+    else if (!empty(validateLastname($lastname))) {
+
+        $errors[] = validateLastname($lastname);
+    }
+    else if (!empty(validateEmail($email))) {
+
+        $errors[] = validateEmail($email);
+    }
+    else if (!empty(validatePassword($password, $passwordConfirm))) {
+
+        $errors[] = validatePassword($password, $passwordConfirm);
+    }
 
     return $errors;
 }
@@ -294,13 +359,42 @@ function validateLoginForm(string $email, string $password): array
     return $errors;
 }
 
+function validateProductForm($name, $description, $price, $stock)
+{
+    $errors = [];
+
+    if (!$name) {
+        $errors[] = 'Le nom du produit est obligatoire';
+    }
+
+    if (!$description) {
+        $errors[] = 'La description du produit est obligatoire';
+    }
+
+    if (!$price) {
+        $errors[] = 'Le prix du produit est obligatoire';
+    }
+    else if (!is_numeric($price) || $price < 0) {
+        $errors[] = 'La valeur du prix est incorrecte';
+    }
+
+    if (!$stock) {
+        $errors[] = 'Le stock du produit est obligatoire';
+    }
+    else if (!ctype_digit($stock) || $stock < 0) {
+        $errors[] = 'La valeur du stock est incorrecte';
+    }
+    
+    return $errors;
+}
+
 function verifyPassword(array $user, string $password)
 {
     /**
      * $user['password'] : mot de passe enregistré en base de données
      * $password : mot de passe rentré par l'utilisateur dans le formulaire de connexion
      */
-    return $user['password'] == $password;
+    return password_verify($password, $user['password']);
 }
 
 
@@ -340,7 +434,7 @@ function initSession()
 /**
  * Enregistre les données de l'utilisateur connecté en session
  */
-function userSessionRegister(int $id, string $firstname, string $lastname, string $email)
+function userSessionRegister(int $id, string $firstname, string $lastname, string $email, string $role)
 {
     initSession();
 
@@ -348,7 +442,8 @@ function userSessionRegister(int $id, string $firstname, string $lastname, strin
         'id' => $id,
         'firstname' => $firstname,
         'lastname' => $lastname,
-        'email' => $email
+        'email' => $email,
+        'role' => $role
     ];
 }
 
@@ -395,7 +490,7 @@ function format_date($date)
 }
 
 /* Inclut le template de base et ses variables */
-function render(string $template, array $values = [])
+function render(string $template, array $values = [], string $baseTemplate = 'base')
 {
     // Extraction des variables
     extract($values);
@@ -404,7 +499,7 @@ function render(string $template, array $values = [])
     $flashMessages = fetchAllFlashMessages();
 
     /* Inclusion du template de base */
-    include '../templates/base.phtml';
+    include '../templates/'.$baseTemplate.'.phtml';
 }
 
 /******************************

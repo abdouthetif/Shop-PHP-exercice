@@ -1,10 +1,8 @@
 <form action="create_account.php" method="POST" class="col-5 d-flex flex-column justify-content-evenly border border-dark rounded">
     <h2 class="text-center mb-3 border-bottom py-2">Inscrivez-vous</h2>
     <?php if (isset($errors) && !empty($errors)): ?>
-        <?php foreach ($errors as $errorAll): ?>
-            <?php foreach ($errorAll as $error): ?>    
-                <p class="alert alert-danger"><?=$error;?></p>
-            <?php endforeach;?>
+        <?php foreach ($errors as $error): ?>
+            <p class="alert alert-danger"><?=$error;?></p>
         <?php endforeach;?>
     <?php endif; ?>
     <div class="row">
@@ -32,6 +30,11 @@
 
 <form action="login.php" method="POST" class="col-5 d-flex flex-column justify-content-evenly border border-dark rounded">
     <h2 class="text-center border-bottom py-2 mb-3">Connectez-vous</h2>
+    <?php if (isset($errorsLogin) && !empty($errorsLogin)): ?>
+        <?php foreach ($errorsLogin as $errorLogin): ?>
+            <p class="alert alert-danger"><?=$errorLogin;?></p>
+        <?php endforeach;?>
+    <?php endif; ?>
     <div class="form-group">
         <label for="email">Adresse email</label>
         <input required type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">

@@ -4,7 +4,7 @@
 require '../src/functions.php';
 
 // Initialisations
-$errors = null;
+$errorsLogin = null;
 
 
 // Si le formulaire a été soumis ... 
@@ -18,10 +18,10 @@ if (!empty($_POST)) {
      * Validation du formulaire : 
      *   - Est-ce que les champs email et mot de passe sont bien remplis ?
      */
-    $errors = validateLoginForm($email, $password);    
+    $errorsLogin = validateLoginForm($email, $password);    
 
     // Si la validation est OK (pas d'erreurs)
-    if (empty($errors)) {
+    if (empty($errorsLogin)) {
 
         /**
          * Authentification : 
@@ -38,7 +38,8 @@ if (!empty($_POST)) {
                 $result['id'],
                 $result['firstname'],
                 $result['lastname'],
-                $result['email']
+                $result['email'],
+                $result['role']
             );
 
             // Redirection vers la page d'accueil avec un message flash de confirmation
@@ -47,12 +48,14 @@ if (!empty($_POST)) {
             exit;
         }
         else {
-            $errors[] = $result;
+            $errorsLogin[] = $result;
         }
     }            
 }
 
 // Affichage du formulaire de connexion avec la fonction render()
 render('create_account', [
-    'pageTitle' => 'Connectez-vous'
+    'pageTitle' => 'Créez un compte ou connectez vous', 
+    'template_bg' => 'bg-light',
+    'errorsLogin' => $errorsLogin
 ]);
