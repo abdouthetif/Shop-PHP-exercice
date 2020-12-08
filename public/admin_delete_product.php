@@ -4,11 +4,7 @@
 require '../src/functions.php';
 
 // Autorisation : l'utilisateur est-il connecté et a-t-il le rôle ADMIN ?
-if (!isAuthenticated() || $_SESSION['user']['role'] != ROLE_ADMIN) {
-    http_response_code(403);
-    echo "Vous n'êtes pas autorisé à accéder à cette page.";
-    exit;
-}
+verifyAdmin();
 
 // Récupération de l'id du produit à modifier dans la chaîne de requête de l'URL
 if (!array_key_exists('id', $_GET) || !isset($_GET['id']) || !ctype_digit($_GET['id'])) {
