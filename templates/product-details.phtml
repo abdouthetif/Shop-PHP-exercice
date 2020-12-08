@@ -42,12 +42,12 @@
                         <?php endfor;?>
                     </div>
                 </div>
-                <div class="card-body">
-                    <p class="card-text"><?=$comment['content'];?></p>
+                <div class="card-body"> <!-- TODO: add htmlspecialchars for echo string -->
+                    <p class="card-text"><?=nl2br(htmlspecialchars($comment['content']));?></p>
                 </div>
                 <div class="card-footer">
-                    <span>Posté le <?=format_date($comment['createdAt']);?></span>
-                    <span>Par </span>
+                    <span>Posté le <?=format_date($comment['commentCreatedAt']);?></span>
+                    <span>Par <?=$comment['authorLname'];?> <?=$comment['authorFname'];?></span>
                 </div>
             </div>
         <?php endforeach;?>

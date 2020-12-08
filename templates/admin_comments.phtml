@@ -1,0 +1,66 @@
+<!-- Liste des commentaires (modification, suppression)-->
+<section class="col">
+    <h1 class="text-center mb-3">Modération des commentaires</h1>
+    <?php if(empty($comments)): ?>
+        <p class="text-center">Pas d'avis pour le moment ! </p>
+    <?php else: ?>
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#ID du commentaire</th>
+                    <th scope="col">Nom du produit</th>
+                    <th scope="col">Titre du commentaire</th>
+                    <th scope="col">Contenu du commentaire</th>
+                    <th scope="col">Note du commentaire</th>
+                    <th scope="col">Nom de l'utilisateur</th>
+                    <th scope="col">Date de publication</th>
+                    <th scope="col">Validé par un modérateur</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($comments as $comment) : ?>
+                    <tr>
+                        <th scope="row"><?= $comment['commentId']; ?></th>
+                        <td><?= $comment['productName']; ?></td>
+                        <td><?= $comment['title']; ?></td>
+                        <td><?= $comment['content']; ?></td>
+                        <td><?= $comment['rating']; ?></td>
+                        <td><?= $comment['authorFname']; ?> <?= $comment['authorLname']; ?></td>
+                        <td><?= $comment['commentCreatedAt']; ?></td>
+                        <td>
+                            <?php if ($comment['is_validated']) : ?>
+                                <?= 'oui'; ?>
+                            <?php else : ?>
+                                <?= 'non'; ?>
+                            <?php endif; ?>
+                        </td>
+                        <td class="d-flex justify-content-between">
+                            <?php if ($comment['is_validated']) : ?>
+                                <a href="admin_unvalidate_comment.php?id=<?= $comment['commentId']; ?>" title="invalider" class="text-body">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-x-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+                                        <path fill-rule="evenodd" d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
+                                    </svg>
+                                </a>
+                            <?php else : ?>
+                                <a href="admin_validate_comment.php?id=<?= $comment['commentId']; ?>" title="valider" class="text-body">
+                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-check2-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd" d="M15.354 2.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3-3a.5.5 0 1 1 .708-.708L8 9.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+                                        <path fill-rule="evenodd" d="M8 2.5A5.5 5.5 0 1 0 13.5 8a.5.5 0 0 1 1 0 6.5 6.5 0 1 1-3.25-5.63.5.5 0 1 1-.5.865A5.472 5.472 0 0 0 8 2.5z" />
+                                    </svg>
+                                </a>
+                            <?php endif; ?>
+                            <a href="admin_delete_comment.php?id=<?= $comment['commentId']; ?>" title="supprimer" class="text-body">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4L4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                </svg>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
+    <?php endif; ?>
+</section>

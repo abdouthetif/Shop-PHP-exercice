@@ -16,7 +16,7 @@ $productId = intval($_GET['productId']);
 $productDetails = getProductById($productId);
 
 // Récupération de tous les commentaires
-$comments = getAllComments($productId);
+$comments = getCommentsByProductId($productId);
 
 /* GET PICTURE FOR AJAX
 $picture_1 = $productDetails['picture_1'];
@@ -39,10 +39,9 @@ echo json_encode($productPictures);
 
 // Inclusion du fichier de template et ses variables
 $pageTitle = $productDetails['name'];
-$template_bg = 'bg-light';
 render('product-details', [
     'productDetails' => $productDetails,
     'comments' => $comments,
     'pageTitle' => $pageTitle, 
-    'template_bg' => $template_bg
+    'template_bg' => 'bg-light'
 ]);

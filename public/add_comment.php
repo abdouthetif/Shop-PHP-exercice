@@ -17,15 +17,16 @@ else if (empty($_POST['title'])) {
     exit;
 }
 else {
-    
+    // TODO: add strip_tags on forms
     // Récupération du commentaire et son titre, de l'id du produit et du nombre d'étoiles
-    $comment = $_POST['comment'];
-    $productId = $_POST['productId'];
+    $comment = strip_tags($_POST['comment']);
+    $productId = intval($_POST['productId']);
     $rating = $_POST['starRate'];
-    $title = $_POST['title'];
+    $title = strip_tags($_POST['title']);
+    $userId = getUserId();
 
     // Ajout du commentaire et ses informations dans la BDD
-    addComment($comment, $title, $productId, $rating);
+    addComment($comment, $title, $productId, $rating, $userId);
 
     // Création d'un message flash
     addFlashMessage('Votre commentaire a bien été pris en compte.');

@@ -105,16 +105,41 @@ function getProductById(int $id)
     return selectOne($sql, [$id]);
 }
 
-/* Récupère tous les commentaires */
-function getAllComments(int $id)
+/* Récupère tous les commentaires pour chaque produit */
+function getCommentsByProductId(int $id, bool $isValidated = true)
 {
     // Requête de sélection SQL
-    $sql = 'SELECT content, createdAt, title, rating
+    $sql = 'SELECT content, comments.createdAt AS commentCreatedAt, title, rating, firstname AS authorFname, lastname AS authorLname
             FROM comments
-            WHERE product_id = ?
-            ORDER BY `createdAt` DESC';
+            INNER JOIN users
+            ON comments.user_id = users.id
+            WHERE product_id = ? AND is_validated = ?
+            ORDER BY `commentCreatedAt` DESC';
 
-    return selectAll($sql, [$id]);
+    return selectAll($sql, [$id, $isValidated]);
+}
+
+/* Récupère tous les commentaires */
+function getAllComments()
+{
+    // Requête de sélection SQL
+    $sql = 'SELECT comments.id AS commentId, 
+                   content, 
+                   comments.createdAt AS commentCreatedAt, 
+                   title, 
+                   rating, 
+                   is_validated, 
+                   firstname AS authorFname, 
+                   lastname AS authorLname,
+                   products.name AS productName
+            FROM comments
+            INNER JOIN users
+            ON comments.user_id = users.id
+            INNER JOIN products
+            ON comments.product_id = products.id
+            ORDER BY `commentCreatedAt` DESC';
+
+    return selectAll($sql);
 }
 
 function getAllCategories()
@@ -138,13 +163,13 @@ function getAllCreators()
 }
 
 /* Ajoute le commentaire et ses détails dans la BDD */
-function addComment(string $comment, string $title, int $productId, int $rating) {
+function addComment(string $comment, string $title, int $productId, int $rating, int $userId, bool $isValidated = false) {
 
     // Requête SQL
-    $sql = 'INSERT INTO comments (content, createdAt, product_id, title, rating)
-            VALUES (?, Now(), ?, ?, ?)';
+    $sql = 'INSERT INTO comments (content, createdAt, product_id, title, rating, user_id, is_validated)
+            VALUES (?, Now(), ?, ?, ?, ?, ?)';
             
-    prepareAndExecuteQuery($sql, [$comment, $productId, $title, $rating]);
+    prepareAndExecuteQuery($sql, [$comment, $productId, $title, $rating, $userId, $isValidated]);
 
 }
 
@@ -180,6 +205,23 @@ function updateProduct(int $productId, string $name, string  $description, float
             WHERE products.id = ?';
 
     prepareAndExecuteQuery($sql, [$name, $description, $price, $stock, $categoryId, $creatorId, $picture, $productId]);
+}
+
+function updateCommentValidation(int $commentId, bool $isValidated)
+{
+    $sql = 'UPDATE comments
+            SET is_validated = ?
+            WHERE comments.id = ?';
+
+    prepareAndExecuteQuery($sql, [$isValidated, $commentId]);
+}
+
+function deleteComment(int $commentId)
+{
+    $sql = 'DELETE FROM comments
+            WHERE id = ?';
+
+    prepareAndExecuteQuery($sql, [$commentId]);
 }
 
 function removeProduct(int $productId)
@@ -563,4 +605,33 @@ function hasFlashMessages(): bool
 
     // Retourne true si il y a des messages dans le tableau, false sinon
     return !empty($_SESSION['flashbag']);
+}
+
+function getUserFullname(): string
+{
+    if (!isAuthenticated()) {
+        return null;
+    }
+
+    // S'il est connecté
+    return $_SESSION['user']['firstname'] . ' ' . $_SESSION['user']['lastname'];
+}
+
+function getUserId(): ?int 
+{
+    if (!isAuthenticated()) {
+        return null;
+    }
+
+    return $_SESSION['user']['id'];
+}
+
+function verifyAdmin()
+{
+    // Autorisation : l'utilisateur est-il connecté et a-t-il le rôle ADMIN ?
+    if (!isAuthenticated() || $_SESSION['user']['role'] != ROLE_ADMIN) {
+        http_response_code(403);
+        echo "Vous n'êtes pas autorisé à accéder à cette page.";
+        exit;
+    }
 }
