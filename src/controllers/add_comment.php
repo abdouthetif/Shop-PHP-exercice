@@ -1,5 +1,9 @@
 <?php
 
+use App\Service\Flashbag;
+use App\Service\UserSession;
+use App\Model\CommentModel;
+
 // Initialise l'objet Flashbag
 $flashModel = new Flashbag();
 

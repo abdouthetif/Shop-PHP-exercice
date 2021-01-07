@@ -1,5 +1,8 @@
 <?php
 
+use App\Service\Flashbag;
+use App\Service\UserSession;
+
 // Déconnexion utilisateur
 $userSession = new UserSession();
 $userSession->logout();

@@ -1,5 +1,8 @@
 <?php
 
+use App\Service\Flashbag;
+use App\Model\ProductModel;
+
 // Récupère l'id du produit
 $productId = $_GET['id'];
 

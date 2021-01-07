@@ -1,5 +1,9 @@
 <?php
 
+use App\Model\ProductModel;
+use App\Model\CategoryModel;
+use App\Model\CreatorModel;
+
 // Sélection des produits
 $products = (new ProductModel())->getAllProducts();
 

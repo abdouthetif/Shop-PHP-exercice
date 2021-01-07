@@ -1,5 +1,7 @@
 <?php
 
+use App\Model\ProductModel;
+
 // On crée un objet de la classe ProductModel
 $productModel = new ProductModel();
 

@@ -51,7 +51,7 @@ function validateLastname(string $lastname)
 function validateEmail(string $email) 
 {
     $errors = "";
-    $userModel = new UserModel();
+    $userModel = new \App\Model\UserModel();
     
     // Vérifie si le champ est vide
     if (!isset($email) || empty($email)) {
@@ -217,7 +217,7 @@ function render(string $template, array $values = [], string $baseTemplate = 'ba
     extract($values);
 
     // Affichage des messages flash
-    $flashModel = new Flashbag();
+    $flashModel = new \App\Service\Flashbag();
     $flashMessages = $flashModel->fetchAllFlashMessages();
 
     /* Inclusion du template de base */

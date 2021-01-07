@@ -1,5 +1,8 @@
 <?php
 
+use App\Service\Flashbag;
+use App\Model\CreatorModel;
+
 // Récupère l'id du créateur
 $creatorId = $_GET['id'];
 

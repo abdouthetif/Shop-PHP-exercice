@@ -1,5 +1,7 @@
 <?php
 
+use App\Model\CreatorModel;
+
 // Initialisation
 $errors = null;
 

@@ -1,5 +1,7 @@
 <?php 
 
+namespace App\Core;
+
 class Autoloader {
 
     // Enregistrement de la fonction autoload() en tant que fonction d'autoloading
@@ -11,14 +13,11 @@ class Autoloader {
     // PHP exécutera la fonction autoload() à chaque fois qu'il va chercher une classe inconnue
     static public function autoload($classname)
     {
-        if (file_exists('../src/Core/' . $classname . '.php')) {
-            require '../src/Core/' . $classname . '.php';
-        }
-        else if (file_exists('../src/Model/' . $classname . '.php')) {
-            require '../src/Model/' . $classname . '.php';
-        }
-        else if (file_exists('../src/Service/' . $classname . '.php')) {
-            require '../src/Service/' . $classname . '.php';
+        $path = str_replace('App', 'src', $classname);
+        $path = str_replace('\\', '/', $path);
+
+        if (file_exists('../' . $path . '.php')) {
+            require '../' . $path . '.php';
         }
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Model\CategoryModel;
+
 // Initialisation
 $errors = null;
 

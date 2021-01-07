@@ -1,5 +1,7 @@
 <?php
 
+use App\Model\CommentModel;
+
 // Récupération de tous les commentaires
 $comments = (new CommentModel())->getAllComments();
 

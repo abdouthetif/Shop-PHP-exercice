@@ -1,5 +1,8 @@
 <?php
 
+use App\Service\Flashbag;
+use App\Model\CategoryModel;
+
 // Récupère l'id de la catégorie
 $categoryId = $_GET['id'];
 

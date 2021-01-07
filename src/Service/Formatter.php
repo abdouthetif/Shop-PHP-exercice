@@ -1,5 +1,10 @@
 <?php
 
+namespace App\Service;
+
+use \NumberFormatter;
+use \DateTime;
+
 class Formatter
 {
     /* Formate un prix à la française xx,xx € */

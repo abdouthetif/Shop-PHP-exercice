@@ -4,6 +4,8 @@
  * GESTION DES MESSAGES FLASH
  ******************************/
 
+namespace App\Service;
+
 class Flashbag
 {
     // Constructeur

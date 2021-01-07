@@ -1,5 +1,8 @@
 <?php
 
+use App\Service\Flashbag;
+use App\Model\UserModel;
+
 // Initialisation
 $errors = null;
 $firstname = null;
@@ -32,8 +35,6 @@ if(!empty($_POST)) {
 
         // Redirection vers la page de succès
         header('Location: /');
-
-        // Arrête le script php
         exit;
     }
 }

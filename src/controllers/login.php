@@ -1,5 +1,9 @@
 <?php
 
+use App\Service\Flashbag;
+use App\Service\UserSession;
+use App\Service\Authenticator;
+
 // Initialisations
 $errorsLogin = null;
 $flashModel = new Flashbag();

@@ -1,5 +1,10 @@
 <?php 
 
+use App\Service\Flashbag;
+use App\Model\ProductModel;
+use App\Model\CategoryModel;
+use App\Model\CreatorModel;
+
 // Initialisation
 $errors = null;
 

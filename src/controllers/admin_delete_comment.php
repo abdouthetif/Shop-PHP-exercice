@@ -1,5 +1,8 @@
 <?php
 
+use App\Service\Flashbag;
+use App\Model\CommentModel;
+
 // Récupère l'id du commentaire
 $commentId = $_GET['id'];
 

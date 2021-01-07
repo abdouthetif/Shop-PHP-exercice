@@ -1,5 +1,9 @@
 <?php
 
+use App\Service\Flashbag;
+use App\Model\ProductModel;
+use App\Model\CommentModel;
+
 // Récupération de l'id du produit dans l'url
 $productId = intval($_GET['productId']);
 

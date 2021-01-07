@@ -1,5 +1,11 @@
 <?php
 
+// Espace de nom
+namespace App\Model;
+
+// Import des classes auxquels on fait référence
+use App\Core\AbstractModel;
+
 class ProductModel extends AbstractModel
 {
     /* Récupère tous les produits */

@@ -12,7 +12,7 @@
                     </a>
                 </h5>
                 <p class="card-text h5">Créateur : <?=$product['shop_name'];?></p>
-                <p class="card-text h5">Prix : <?=Formatter::formatPrice($product['price']);?></p>
+                <p class="card-text h5">Prix : <?=\App\Service\Formatter::formatPrice($product['price']);?></p>
                 <span class="badge badge-secondary mb-2"><?= $product['label'];?></span>
                 <a href="#" class="btn btn-primary d-block">Ajouter au panier</a>
             </div>

@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Service;
+
+use App\Model\UserModel;
+
 class Authenticator
 {
     function verifyPassword(array $user, string $password)

@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Core;
+
+use App\Service\Flashbag;
+
 abstract class AbstractModel
 {
     // Propriétés

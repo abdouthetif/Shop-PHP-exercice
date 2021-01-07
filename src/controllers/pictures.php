@@ -1,5 +1,7 @@
 <?php
 
+use App\Model\ProductModel;
+
 $productId = $_POST['productId'];
 $productModel = new ProductModel();
 $productDetails = $productModel->getProductById($productId);

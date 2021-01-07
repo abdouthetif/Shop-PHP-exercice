@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Model;
+
+use App\Core\AbstractModel;
+
 class CommentModel extends AbstractModel
 {
     /* Récupère tous les commentaires d'un produit */

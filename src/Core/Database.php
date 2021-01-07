@@ -1,5 +1,10 @@
 <?php
 
+namespace App\Core;
+
+use \PDO;
+use \PDOStatement;
+
 class Database
 {
     // Propriétés

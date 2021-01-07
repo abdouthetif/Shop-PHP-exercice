@@ -46,7 +46,7 @@
                     <p class="card-text"><?=nl2br(htmlspecialchars($comment['content']));?></p>
                 </div>
                 <div class="card-footer">
-                    <span>Posté le <?=Formatter::formatDate($comment['commentCreatedAt']);?></span>
+                    <span>Posté le <?=\App\Service\Formatter::formatDate($comment['commentCreatedAt']);?></span>
                     <span>Par <?=$comment['authorLname'];?> <?=$comment['authorFname'];?></span>
                 </div>
             </div>
@@ -55,7 +55,7 @@
 </section>
 
 <!-- Formulaire de commentaire -->
-<?php if ((new UserSession())->isAuthenticated()): ?>
+<?php if ((new \App\Service\UserSession())->isAuthenticated()): ?>
     <div class="col-12 mt-5">
         <hr>
         <form action="/comment/add" class="text-center" method="POST">
