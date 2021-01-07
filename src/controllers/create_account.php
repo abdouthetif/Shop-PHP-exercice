@@ -1,16 +1,17 @@
 <?php
-session_start();
-// Inclusion des dépendances
-require '../src/functions.php';
 
 // Initialisation
 $errors = null;
 $firstname = null;
 $lastname = null;
 $email = null;
+$userModel = new UserModel();
+$flashModel = new Flashbag();
 
+// Si le formulaire a correctement été soumis
 if(!empty($_POST)) {
 
+    // Récupération des données du formulaire
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
     $email = $_POST['email'];
@@ -24,13 +25,13 @@ if(!empty($_POST)) {
     // Si il n'y a pas d'erreur on ajoute l'email
     if (empty($errors)) {
 
-        // Ajout de l'email dans le fichier csv
-        addUser($firstname, $lastname, $email, $password, ROLE_USER);
+        // Ajout de l'email dans la BDD
+        $userModel->addUser($firstname, $lastname, $email, $password, ROLE_USER);
 
-        addFlashMessage("Votre compte a bien été créé !");
+        $flashModel->addFlashMessage("Votre compte a bien été créé !");
 
         // Redirection vers la page de succès
-        header('Location: index.php');
+        header('Location: /');
 
         // Arrête le script php
         exit;

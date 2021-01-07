@@ -1,11 +1,9 @@
-<?php 
-
-// Inclusion des dépendances
-require '../src/functions.php';
+<?php
 
 // Initialisations
 $errorsLogin = null;
-
+$flashModel = new Flashbag();
+$userSession = new UserSession();
 
 // Si le formulaire a été soumis ... 
 if (!empty($_POST)) {
@@ -28,13 +26,14 @@ if (!empty($_POST)) {
          *    1°) Est-ce que l'email existe bien dans la table users ?
          *    2°) Est-ce que le mot de passe est correct ?
          */
-        $result = authenticate($email, $password);   
+        $authenticator = new Authenticator();
+        $result = $authenticator->authenticate($email, $password);   
         
         // Si tout est OK (pas d'erreur)
         if (is_array($result)) {
 
             // Enregistrement de l'utilisateur en session
-            userSessionRegister(
+            $userSession->userSessionRegister(
                 $result['id'],
                 $result['firstname'],
                 $result['lastname'],
@@ -43,8 +42,8 @@ if (!empty($_POST)) {
             );
 
             // Redirection vers la page d'accueil avec un message flash de confirmation
-            addFlashMessage('Bonjour ' . $result['firstname'] . ' !');
-            header('Location: index.php');
+            $flashModel->addFlashMessage('Bonjour ' . $result['firstname'] . ' !');
+            header('Location: /');
             exit;
         }
         else {

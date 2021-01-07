@@ -20,7 +20,7 @@
             <p class="alert alert-danger"><?=$error;?></p>
         <?php endforeach; ?>
     <?php endif; ?>
-    <form action="admin_edit_product.php" method="POST">
+    <form action="/admin/product/edit" method="POST">
     <input type="hidden" name="product-id" value="<?=$product['productId'];?>">
         <div class="form-group">
             <label for="name">Nom</label>
@@ -31,8 +31,20 @@
             <textarea required class="form-control" id="description" name="description"><?=$_POST['description']??$product['description'];?></textarea>
         </div>
         <div class="form-group">
-            <label for="picture">Image</label>
-            <input type="text" class="form-control" id="picture" name="picture" value="<?=$_POST['picture_1']??$product['picture_1'];?>">
+            <label for="picture_1">Image 1</label>
+            <input type="text" class="form-control" id="picture_1" name="picture_1" value="<?=$_POST['picture_1']??$product['picture_1'];?>">
+        </div>
+        <div class="form-group">
+            <label for="picture_2">Image 2</label>
+            <input type="text" class="form-control" id="picture_2" name="picture_2" value="<?=$_POST['picture_2']??$product['picture_2'];?>">
+        </div>
+        <div class="form-group">
+            <label for="picture_3">Image 3</label>
+            <input type="text" class="form-control" id="picture_3" name="picture_3" value="<?=$_POST['picture_3']??$product['picture_3'];?>">
+        </div>
+        <div class="form-group">
+            <label for="picture_4">Image 4</label>
+            <input type="text" class="form-control" id="picture_4" name="picture_4" value="<?=$_POST['picture_4']??$product['picture_4'];?>">
         </div>
         <div class="form-group">
             <label for="price">Prix</label>

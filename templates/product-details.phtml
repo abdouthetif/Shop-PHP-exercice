@@ -1,6 +1,6 @@
 <!-- Product Image -->
 <aside class="col masthead text-center">
-    <img src="images/<?=$productDetails['picture_1'];?>" alt="<?=$productDetails['name'];?>" class="w-30rem">
+    <img data-productId="<?=$productDetails['productId'];?>" src="images/<?=$productDetails['picture_1'];?>" alt="<?=$productDetails['name'];?>" class="w-30rem">
 </aside>
 
 <!-- Product Details -->
@@ -46,7 +46,7 @@
                     <p class="card-text"><?=nl2br(htmlspecialchars($comment['content']));?></p>
                 </div>
                 <div class="card-footer">
-                    <span>Posté le <?=format_date($comment['commentCreatedAt']);?></span>
+                    <span>Posté le <?=Formatter::formatDate($comment['commentCreatedAt']);?></span>
                     <span>Par <?=$comment['authorLname'];?> <?=$comment['authorFname'];?></span>
                 </div>
             </div>
@@ -55,10 +55,10 @@
 </section>
 
 <!-- Formulaire de commentaire -->
-<?php if (isAuthenticated()): ?>
+<?php if ((new UserSession())->isAuthenticated()): ?>
     <div class="col-12 mt-5">
         <hr>
-        <form action="add_comment.php" class="text-center" method="POST">
+        <form action="/comment/add" class="text-center" method="POST">
             <input type="hidden" name="productId" value="<?=$productDetails['productId'];?>">
             <fieldset>
                 <legend class="h3">Donnez votre avis !</legend>
@@ -70,7 +70,7 @@
 
                     <!-- Rating Star -->
                     <div>
-                        <input type="hidden" name="starRate" value="1" id="starRate">
+                        <input type="hidden" name="starRate" value="0" id="starRate">
                         <span>Notez le produit : </span>
                         <div class="d-inline mx-4 starRating">
                             <svg data-rating="1" width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-star-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -100,5 +100,5 @@
         </form>
     </div>
 <?php else: ?>
-    <p><a href="login.php">Connectez-vous</a> pour donner votre avis !</p>
+    <p class="mt-5"><a href="/connexion/login">Connectez-vous</a> pour donner votre avis !</p>
 <?php endif; ?>  

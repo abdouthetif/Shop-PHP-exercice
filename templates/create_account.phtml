@@ -1,4 +1,4 @@
-<form action="create_account.php" method="POST" class="col-5 d-flex flex-column justify-content-evenly border border-dark rounded">
+<form action="/create-account" method="POST" class="col-5 d-flex flex-column justify-content-evenly border border-dark rounded">
     <h2 class="text-center mb-3 border-bottom py-2">Inscrivez-vous</h2>
     <?php if (isset($errors) && !empty($errors)): ?>
         <?php foreach ($errors as $error): ?>
@@ -28,7 +28,7 @@
     <button type="submit" class="btn btn-primary mb-3 text-uppercase">S'inscrire</button>
 </form>
 
-<form action="login.php" method="POST" class="col-5 d-flex flex-column justify-content-evenly border border-dark rounded">
+<form action="/connexion/login" method="POST" class="col-5 d-flex flex-column justify-content-evenly border border-dark rounded">
     <h2 class="text-center border-bottom py-2 mb-3">Connectez-vous</h2>
     <?php if (isset($errorsLogin) && !empty($errorsLogin)): ?>
         <?php foreach ($errorsLogin as $errorLogin): ?>

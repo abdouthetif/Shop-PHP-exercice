@@ -1,5 +1,5 @@
 // Tableau des images
-let images = [$(".masthead img").attr("src"), "images/montre_festina.jpg", "images/montre_maserati.jpg"];
+let images = [];
 
 // Tableau des indicateurs
 let circleArray = [];
@@ -12,20 +12,40 @@ let timer;
 
 // Attend que le DOM soit chargé
 $(function() {
+
+    // Récupération de l'id du produit dans l'attribut "data-productId" de la balise img
+    let productId = $(".masthead img").attr('data-productId')
+
+    $.ajax({
+        url: '/pictures',
+        type: 'POST',
+        dataType : 'json',
+        data : {'productId' : productId},
+        success: function(response) {
+            for (i=0; i<response['pictures'].length; i++) {
+                images[i] = response['pictures'][i];
+            }
+
+            // Crée les indicateurs en bas des images
+            createIndicators();
+
+            // Boucle sur tous les svg contenu dans la DIV "circle"
+            $("#circle svg").each(function() {
+                // Ecouteur d'évènements sur chaque svg
+                $(this).on("click", indicatorChangeImage);
+
+                // Stock chaque svg dans un tableau
+                circleArray.push($(this));
+            });
+        },
+        error: function(error){
+            console.log(error);
+            console.log('error');
+        }
+    });
+    
     // Crée la flèche de gauche et de droite
     createArrow();
-
-    // Crée les indicateurs en bas des images
-    createIndicators();
-    
-    // Boucle sur tous les svg contenu dans la DIV "circle"
-    $("#circle svg").each(function() {
-        // Ecouteur d'évènements sur chaque svg
-        $(this).on("click", indicatorChangeImage);
-
-        // Stock chaque svg dans un tableau
-        circleArray.push($(this));
-    });
 
     // Lancement du carousel
     startCarousel();
@@ -40,25 +60,11 @@ $(function() {
 
     // Flèche de gauche
     $("#reculer").on("click", reculer);
-    
-    $.ajax({
-        url: 'product-details.php',
-        type: 'POST',
-        dataType : 'json',
-        success: function(response) {
-            var json = $.parseJSON(response);
-            console.log(json.pictures);
-            console.log('success');
-        },
-        error: function(error){
-            console.log(error);
-            console.log('error');
-        }
-    });
 });
 
 // Créer les flèches gauche et droite
-function createArrow() {
+function createArrow() 
+{
     // Mets une flèche à gauche des images
     $(".masthead").prepend(
         `<div style="position: absolute;z-index: 1;left: 2%;top: 50%;cursor: pointer">`
@@ -79,7 +85,8 @@ function createArrow() {
 }
 
 // Créer les indicateurs en bas des images
-function createIndicators() {
+function createIndicators() 
+{
     // Crée une div "circle" en bas des images
     $(".masthead").append(`<div id="circle" class="text-center" style="color: black;position: absolute;left: 42%;bottom: 0;z-index: 1"></div>`);
 
@@ -96,19 +103,22 @@ function createIndicators() {
 }
 
 // Démarre le carousel
-function startCarousel() {
+function startCarousel() 
+{
     timer = setInterval(avancer, 4000);
 }
 
 // Stop le carousel
-function stopCarousel() {
+function stopCarousel() 
+{
     clearInterval(timer);
 }
 
 // Afficher l'image et l'indicateur correspondant
-function setBackground() {
+function setBackground() 
+{
     // Modification de l'attribut "src" en lui ajoutant le prochain url de mon tableau
-    $(".masthead img").attr("src", images[index]);
+    $(".masthead img").attr("src", 'images/'+images[index]);
     
     // Affiche l'indicator correspondant à l'image actuelle en noir
     $("#circle svg").css({"background-color": "", "border-radius": ""});
@@ -116,16 +126,19 @@ function setBackground() {
 }
 
 // Passe à l'image suivante du carousel
-function avancer() {
+function avancer() 
+{
     // Si l'index = dernier index du tableau, réinitialise l'index sinon l'incrémente
     index == images.length - 1 ? index = 0 : index++;
 
     // Affiche l'image et l'indicateur correspondant
     setBackground();
+    console.log(index)
 }
 
 // "Recule" dans le carousel
-function reculer() {
+function reculer() 
+{
     // Si l'index = 0, initialise l'index au dernier index du tableau sinon le décrémente
     index == 0 ? index = images.length - 1 : index--;
 
@@ -134,9 +147,9 @@ function reculer() {
 }
 
 // Change l'image du slide selon l'indicateur cliqué
-function indicatorChangeImage() {
+function indicatorChangeImage() 
+{
     // Récupération de la valeur contenu dans l'attribut "data-index"
-    // et met à jour la variable "index"
     index = $(this).attr("data-index");
 
     // Affiche l'image et l'indicateur correspondant

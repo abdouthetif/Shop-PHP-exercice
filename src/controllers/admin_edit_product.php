@@ -1,26 +1,29 @@
-<?php 
-
-// Inclusion des dépendances
-require '../src/functions.php';
-
-// Autorisation : l'utilisateur est-il connecté et a-t-il le rôle ADMIN ?
-verifyAdmin();
+<?php
 
 // Initialisations
 $errors = null;
+$productModel = new ProductModel();
+$categoryModel = new CategoryModel();
+$creatorModel = new CreatorModel();
+$flashModel = new Flashbag();
 
 // Si le formulaire est soumis 
 if (!empty($_POST)) {
 
     // Récupérer les données du formulaire
-    $name = $_POST['name'];
-    $description = $_POST['description'];
+    $name = strip_tags($_POST['name']);
+    $description = strip_tags($_POST['description']);
     $price = str_replace(',', '.', $_POST['price']);
-    $stock = $_POST['stock'];
+    $stock = intval($_POST['stock']);
     $categoryId = intval($_POST['category']);
     $creatorId = intval($_POST['creator']);
-    $picture = $_POST['picture'];
     $productId = intval($_POST['product-id']);
+
+
+    $pictureA = $_POST['picture_1'];
+    $pictureB = $_POST['picture_2'];
+    $pictureC = $_POST['picture_3'];
+    $pictureD = $_POST['picture_4'];
 
     // Validation des données
     $errors = validateProductForm($name, $description, $price, $stock);
@@ -29,11 +32,11 @@ if (!empty($_POST)) {
     if (empty($errors)) {
 
         // Insertion du produit dans la BDD
-        updateProduct($productId, $name, $description, $price, $stock, $categoryId, $creatorId, $picture);
+        $productModel->updateProduct($productId, $name, $description, $price, $stock, $categoryId, $creatorId, $pictureA, $pictureB, $pictureC, $pictureD);
 
         // Message flash puis redirection vers le dashboard admin
-        addFlashMessage('Produit correctement mis à jour');
-        header('Location: admin.php');
+        $flashModel->addFlashMessage('Produit correctement mis à jour');
+        header('Location: /admin/product');
         exit;
     }
 }
@@ -48,13 +51,13 @@ if (!isset($productId) && (!array_key_exists('id', $_GET) || !isset($_GET['id'])
 $productId = $productId??$_GET['id'];
 
 // Sélection du produit à modifier (pour pré remplir le formulaire)
-$product = getProductById($productId);
+$product = $productModel->getProductById($productId);
 
 // Sélection des catégories
-$categories = getAllCategories();
+$categories = $categoryModel->getAllCategories();
 
 // Sélection des créateurs
-$creators = getAllCreators();
+$creators = $creatorModel->getAllCreators();
 
 // Affichage du formulaire
 render('admin_edit_product', [
